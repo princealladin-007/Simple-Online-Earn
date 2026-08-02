@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Simple Online Earn</title>
+    <!-- Monetag SDK (zone 11478978) -->
+    <script src='//libtl.com/sdk.js' data-zone='11478978' data-sdk='show_11478978'></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: #0b0e1a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+
+        /* Telegram‑inspired card */
+        .telegram-card {
+            max-width: 420px;
+            width: 100%;
+            background: #1e293b;
+            background: linear-gradient(145deg, #1a2332 0%, #131b2b 100%);
+            border-radius: 36px;
+            padding: 24px 20px 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.04);
+            color: #f0f4fa;
+            transition: all 0.2s;
+        }
+
+        /* header */
+        .app-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .app-header i {
+            font-size: 28px;
+            color: #facc15;
+            background: #2a3348;
+            padding: 10px;
+            border-radius: 16px;
+            box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .app-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #facc15, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .app-header span {
+            margin-left: auto;
+            font-size: 13px;
+            background: #2d384e;
+            padding: 6px 14px;
+            border-radius: 40px;
+            color: #b9c7e0;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        /* balance card */
+        .balance-box {
+            background: #0f1625;
+            border-radius: 28px;
+            padding: 22px 20px;
+            margin-bottom: 24px;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 1px solid #2c3a50;
+        }
+
+        .balance-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #9aaec9;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            margin-bottom: 8px;
+        }
+
+        .balance-label i {
+            color: #facc15;
+            font-size: 16px;
+        }
+
+        .balance-amount {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+
+        .balance-amount .currency {
+            font-size: 22px;
+            font-weight: 600;
+            color: #d6e2f5;
+        }
+
+        .balance-amount .value {
+            font-size: 42px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        .balance-amount .usdt {
+            font-size: 18px;
+            font-weight: 600;
+            color: #8aa3c9;
+            margin-left: 4px;
+        }
+
+        .per-click {
+            margin-top: 10px;
+            font-size: 14px;
+            background: #1d2940;
+            display: inline-block;
+            padding: 4px 16px 4px 12px;
+            border-radius: 60px;
+            color: #cbd8f0;
+            border: 1px solid #31415e;
+        }
+
+        .per-click i {
+            margin-right: 8px;
+            color: #facc15;
+            font-size: 13px;
+        }
+
+        .per-click strong {
+            color: #facc15;
+            font-weight: 700;
+        }
+
+        /* ad progress */
+        .ad-progress {
+            background: #121b2b;
+            border-radius: 30px;
+            padding: 18px 20px;
+            margin: 20px 0 18px;
+            border: 1px solid #293858;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 15px;
+            font-weight: 500;
+            color: #b2c6e2;
+            margin-bottom: 12px;
+        }
+
+        .progress-header span:last-child {
+            color: #facc15;
+            font-weight: 700;
+        }
+
+        .progress-track {
+            background: #26324a;
+            height: 10px;
+            border-radius: 60px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #facc15, #fbbf24);
+            border-radius: 60px;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 12px #facc1566;
+        }
+
+        .watch-btn {
+            width: 100%;
+            background: linear-gradient(145deg, #facc15, #f0b90b);
+            border: none;
+            padding: 18px 10px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 18px;
+            color: #0b0e1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 8px 0 #a77d0a, 0 8px 20px rgba(250, 204, 21, 0.25);
+            transition: all 0.08s linear;
+            cursor: pointer;
+            margin: 8px 0 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .watch-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #a77d0a, 0 8px 20px rgba(250, 204, 21, 0.2);
+        }
+
+        .watch-btn:disabled {
+            opacity: 0.6;
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #7a5f0a;
+            pointer-events: none;
+        }
+
+        .timer-info {
+            text-align: center;
+            font-size: 14px;
+            color: #facc15;
+            margin-top: 6px;
+            letter-spacing: 0.2px;
+            min-height: 22px;
+            font-weight: 600;
+        }
+
+        .timer-info i {
+            margin-right: 6px;
+            color: #facc15;
+        }
+
+        .reset-info {
+            text-align: center;
+            font-size: 13px;
+            color: #7b8fb0;
+            margin-top: 6px;
+            letter-spacing: 0.2px;
+        }
+
+        .reset-info i {
+            margin-right: 6px;
+            color: #6d85aa;
+        }
+
+        /* Zone ID display */
+        .zone-id-display {
+            background: #0d1424;
+            border-radius: 30px;
+            padding: 10px 18px;
+            margin: 12px 0 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: 1px solid #2c3d5e;
+            font-size: 14px;
+            color: #9bb0d0;
+        }
+
+        .zone-id-display i {
+            color: #facc15;
+            font-size: 16px;
+        }
+
+        .zone-id-display .zone-number {
+            color: #facc15;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 1px;
+            background: #1a253d;
+            padding: 2px 14px;
+            border-radius: 40px;
+            border: 1px solid #3d547a;
+        }
+
+        /* withdraw section */
+        .withdraw-section {
+            margin-top: 28px;
+            background: #101a2b;
+            border-radius: 28px;
+            padding: 20px 18px;
+            border: 1px solid #2a3a55;
+        }
+
+        .withdraw-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 17px;
+            font-weight: 600;
+            color: #dce6f5;
+            margin-bottom: 16px;
+        }
+
+        .withdraw-title i {
+            color: #facc15;
+            font-size: 20px;
+        }
+
+        .withdraw-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .withdraw-field label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #97adce;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .withdraw-field input {
+            background: #0b111f;
+            border: 1px solid #2e405f;
+            border-radius: 60px;
+            padding: 14px 20px;
+            font-size: 15px;
+            color: white;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .withdraw-field input:focus {
+            border-color: #facc15;
+            box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.15);
+        }
+
+        .withdraw-field input::placeholder {
+            color: #4d6182;
+            font-weight: 400;
+        }
+
+        .withdraw-action {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .min-withdraw {
+            font-size: 14px;
+            background: #1d2942;
+            padding: 6px 14px;
+            border-radius: 40px;
+            color: #b6c9ea;
+            border: 1px solid #314567;
+        }
+
+        .min-withdraw i {
+            margin-right: 6px;
+            color: #facc15;
+        }
+
+        .withdraw-btn {
+            background: #2a3a5a;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 16px;
+            color: #d3def5;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.15s;
+            box-shadow: 0 4px 0 #141e32;
+            border: 1px solid #3f5277;
+        }
+
+        .withdraw-btn i {
+            color: #facc15;
+        }
+
+        .withdraw-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #141e32;
+        }
+
+        .withdraw-btn:disabled {
+            opacity: 0.5;
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #141e32;
+            pointer-events: none;
+        }
+
+        .status-message {
+            margin-top: 12px;
+            font-size: 14px;
+            color: #b1c6e8;
+            background: #0a111f;
+            padding: 10px 16px;
+            border-radius: 40px;
+            border-left: 4px solid #facc15;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-message i {
+            color: #facc15;
+        }
+
+        /* small footer */
+        .footer-note {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 11px;
+            color: #435573;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-note i {
+            margin: 0 4px;
+        }
+
+        /* responsive */
+        @media (max-width: 450px) {
+            .telegram-card {
+                padding: 20px 16px 26px;
+            }
+            .balance-amount .value {
+                font-size: 34px;
+            }
+        }
+
+        /* loading overlay */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #2a3a55;
+            border-top: 4px solid #facc15;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            color: #f0f4fa;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading ad...</div>
+    </div>
+
+    <div class="telegram-card">
+        <!-- Header -->
+        <div class="app-header">
+            <i class="fas fa-coins"></i>
+            <h1>Simple Online Earn</h1>
+            <span>v1.0</span>
+        </div>
+
+        <!-- Balance display -->
+        <div class="balance-box">
+            <div class="balance-label">
+                <i class="fas fa-wallet"></i> Balance
+            </div>
+            <div class="balance-amount">
+                <span class="currency">$</span>
+                <span class="value" id="balanceDisplay">0.000000</span>
+                <span class="usdt">USDT</span>
+            </div>
+            <div class="per-click">
+                <i class="fas fa-arrow-up"></i> per click: <strong>$0.000001</strong>
+            </div>
+        </div>
+
+        <!-- AdReward card -->
+        <div class="ad-progress">
+            <div class="progress-header">
+                <span><i class="fas fa-play-circle" style="margin-right: 6px;"></i>AdReward</span>
+                <span id="watchCounter">0 / 20</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+        </div>
+
+        <!-- Zone ID Display -->
+        <div class="zone-id-display">
+            <i class="fas fa-hashtag"></i>
+            <span>Zone ID:</span>
+            <span class="zone-number">11478978</span>
+        </div>
+
+        <!-- Watch Ad button -->
+        <button class="watch-btn" id="watchAdBtn">
+            <i class="fas fa-video"></i> WATCH AD
+        </button>
+        
+        <!-- Timer Display -->
+        <div class="timer-info" id="timerDisplay">
+            <i class="fas fa-clock"></i> Ready
+        </div>
+        
+        <div class="reset-info">
+            <i class="fas fa-clock"></i> Resets every 24 hours automatically
+        </div>
+
+        <!-- Withdraw section -->
+        <div class="withdraw-section">
+            <div class="withdraw-title">
+                <i class="fas fa-arrow-up-right-from-square"></i> Withdraw to Binance
+            </div>
+            <div class="withdraw-field">
+                <label><i class="fas fa-envelope"></i> Binance Email</label>
+                <input type="email" id="binanceEmail" placeholder="your@binance.email" value="">
+            </div>
+            <div class="withdraw-action">
+                <span class="min-withdraw"><i class="fas fa-dollar-sign"></i> min. $10</span>
+                <button class="withdraw-btn" id="withdrawBtn">
+                    <i class="fas fa-paper-plane"></i> Withdraw USDT
+                </button>
+            </div>
+            <div id="statusMessage" class="status-message">
+                <i class="fas fa-info-circle"></i> <span id="statusText">Ready</span>
+            </div>
+        </div>
+        <div class="footer-note">
+            <i class="fas fa-shield-alt"></i> secured • Binance withdrawal
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ------- state --------
+            const PER_CLICK = 0.000001;
+            const MIN_WITHDRAW = 10;
+            const DAILY_LIMIT = 20;
+            const COOLDOWN_SECONDS = 15;
+
+            // load from localStorage or default
+            let balance = parseFloat(localStorage.getItem('simpleEarn_balance')) || 0;
+            let watchedToday = parseInt(localStorage.getItem('simpleEarn_watched')) || 0;
+            let lastResetDate = localStorage.getItem('simpleEarn_lastReset') || '';
+            let isAdPlaying = false;
+            let isCooldown = false;
+            let cooldownTimer = null;
+            let cooldownSeconds = 0;
+
+            // DOM refs
+            const balanceDisplay = document.getElementById('balanceDisplay');
+            const watchCounter = document.getElementById('watchCounter');
+            const progressFill = document.getElementById('progressFill');
+            const watchBtn = document.getElementById('watchAdBtn');
+            const withdrawBtn = document.getElementById('withdrawBtn');
+            const binanceEmail = document.getElementById('binanceEmail');
+            const statusText = document.getElementById('statusText');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const timerDisplay = document.getElementById('timerDisplay');
+
+            // ------- helper: update UI --------
+            function updateUI() {
+                // balance
+                balanceDisplay.textContent = balance.toFixed(6);
+                // watched counter & progress
+                watchCounter.textContent = `${watchedToday} / ${DAILY_LIMIT}`;
+                const pct = Math.min((watchedToday / DAILY_LIMIT) * 100, 100);
+                progressFill.style.width = pct + '%';
+
+                // enable/disable watch button
+                if (watchedToday >= DAILY_LIMIT) {
+                    watchBtn.disabled = true;
+                    watchBtn.innerHTML = '<i class="fas fa-hourglass-end"></i> Daily limit reached';
+                } else if (isAdPlaying) {
+                    watchBtn.disabled = true;
+                    watchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+                } else if (isCooldown) {
+                    watchBtn.disabled = true;
+                    watchBtn.innerHTML = `<i class="fas fa-hourglass-half"></i> Wait ${cooldownSeconds}s`;
+                } else {
+                    watchBtn.disabled = false;
+                    watchBtn.innerHTML = '<i class="fas fa-video"></i> WATCH AD';
+                }
+
+                // withdraw button (balance >= min && email not empty)
+                const email = binanceEmail.value.trim();
+                if (balance >= MIN_WITHDRAW && email.length > 0 && email.includes('@')) {
+                    withdrawBtn.disabled = false;
+                } else {
+                    withdrawBtn.disabled = true;
+                }
+
+                // save state
+                localStorage.setItem('simpleEarn_balance', balance.toString());
+                localStorage.setItem('simpleEarn_watched', watchedToday.toString());
+                localStorage.setItem('simpleEarn_lastReset', lastResetDate);
+            }
+
+            // ------- reset daily if needed --------
+            function checkDailyReset() {
+                const today = new Date().toDateString();
+                if (lastResetDate !== today) {
+                    // reset watched counter, keep balance
+                    watchedToday = 0;
+                    lastResetDate = today;
+                    localStorage.setItem('simpleEarn_watched', '0');
+                    localStorage.setItem('simpleEarn_lastReset', today);
+                    // also reset progress
+                    updateUI();
+                    setStatus('Daily reset applied', 'info');
+                }
+            }
+
+            // ------- set status msg --------
+            function setStatus(msg, type = 'info') {
+                statusText.textContent = msg;
+                const icon = document.querySelector('#statusMessage i');
+                if (type === 'success') {
+                    icon.className = 'fas fa-check-circle';
+                    document.querySelector('#statusMessage').style.borderLeftColor = '#4ade80';
+                } else if (type === 'error') {
+                    icon.className = 'fas fa-exclamation-triangle';
+                    document.querySelector('#statusMessage').style.borderLeftColor = '#f87171';
+                } else {
+                    icon.className = 'fas fa-info-circle';
+                    document.querySelector('#statusMessage').style.borderLeftColor = '#facc15';
+                }
+            }
+
+            // ------- show loading overlay --------
+            function showLoading(show) {
+                if (show) {
+                    loadingOverlay.classList.add('active');
+                } else {
+                    loadingOverlay.classList.remove('active');
+                }
+            }
+
+            // ------- start cooldown timer --------
+            function startCooldown() {
+                isCooldown = true;
+                cooldownSeconds = COOLDOWN_SECONDS;
+                updateTimerDisplay();
+                updateUI();
+
+                if (cooldownTimer) {
+                    clearInterval(cooldownTimer);
+                }
+
+                cooldownTimer = setInterval(() => {
+                    cooldownSeconds--;
+                    updateTimerDisplay();
+                    updateUI();
+
+                    if (cooldownSeconds <= 0) {
+                        clearInterval(cooldownTimer);
+                        cooldownTimer = null;
+                        isCooldown = false;
+                        timerDisplay.innerHTML = '<i class="fas fa-clock"></i> Ready';
+                        updateUI();
+                        setStatus('Ready for next ad!', 'info');
+                    }
+                }, 1000);
+            }
+
+            // ------- update timer display --------
+            function updateTimerDisplay() {
+                if (isCooldown) {
+                    timerDisplay.innerHTML = `<i class="fas fa-hourglass-half"></i> Wait ${cooldownSeconds}s before next ad`;
+                } else if (isAdPlaying) {
+                    timerDisplay.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Ad playing...';
+                } else if (watchedToday >= DAILY_LIMIT) {
+                    timerDisplay.innerHTML = '<i class="fas fa-hourglass-end"></i> Daily limit reached';
+                } else {
+                    timerDisplay.innerHTML = '<i class="fas fa-clock"></i> Ready to watch';
+                }
+            }
+
+            // ------- watch ad with rewarded popup --------
+            function watchAd() {
+                if (watchedToday >= DAILY_LIMIT) {
+                    setStatus('Daily limit reached (20 ads)', 'error');
+                    return;
+                }
+
+                if (isAdPlaying) {
+                    return;
+                }
+
+                if (isCooldown) {
+                    setStatus(`Please wait ${cooldownSeconds}s before next ad`, 'error');
+                    return;
+                }
+
+                // Show loading overlay
+                showLoading(true);
+                isAdPlaying = true;
+                updateTimerDisplay();
+                updateUI();
+                setStatus('Loading ad...', 'info');
+
+                // Call Monetag rewarded popup
+                if (typeof show_11478978 === 'function') {
+                    try {
+                        show_11478978('pop')
+                            .then(() => {
+                                // User watched ad till the end or closed it in interstitial format
+                                // Reward the user
+                                isAdPlaying = false;
+                                showLoading(false);
+
+                                // Add reward
+                                balance += PER_CLICK;
+                                watchedToday += 1;
+                                updateUI();
+                                setStatus(`+$${PER_CLICK.toFixed(6)} USDT added! (${watchedToday}/${DAILY_LIMIT})`, 'success');
+
+                                // Start cooldown timer
+                                startCooldown();
+
+                                // if limit reached after this click
+                                if (watchedToday >= DAILY_LIMIT) {
+                                    setStatus('Daily limit reached! Come back tomorrow.', 'info');
+                                    timerDisplay.innerHTML = '<i class="fas fa-hourglass-end"></i> Daily limit reached';
+                                }
+                            })
+                            .catch((e) => {
+                                // User got error during playing ad
+                                console.warn('Ad error:', e);
+                                isAdPlaying = false;
+                                showLoading(false);
+                                setStatus('Ad error occurred. Please try again.', 'error');
+                                updateTimerDisplay();
+                                updateUI();
+                            });
+                    } catch (e) {
+                        console.warn('Monetag ad exception:', e);
+                        isAdPlaying = false;
+                        showLoading(false);
+                        setStatus('Ad error occurred. Please try again.', 'error');
+                        updateTimerDisplay();
+                        updateUI();
+                    }
+                } else {
+                    // Fallback: simulate ad (just log)
+                    console.log('Monetag SDK: show_11478978(\'pop\') called (simulated)');
+                    // Simulate ad loading
+                    setTimeout(() => {
+                        // Simulate successful ad watch
+                        isAdPlaying = false;
+                        showLoading(false);
+                        balance += PER_CLICK;
+                        watchedToday += 1;
+                        updateUI();
+                        setStatus(`+$${PER_CLICK.toFixed(6)} USDT added! (${watchedToday}/${DAILY_LIMIT})`, 'success');
+
+                        // Start cooldown timer
+                        startCooldown();
+
+                        if (watchedToday >= DAILY_LIMIT) {
+                            setStatus('Daily limit reached! Come back tomorrow.', 'info');
+                            timerDisplay.innerHTML = '<i class="fas fa-hourglass-end"></i> Daily limit reached';
+                        }
+                    }, 2000);
+                }
+            }
+
+            // ------- withdraw -------
+            function handleWithdraw() {
+                const email = binanceEmail.value.trim();
+                if (!email || !email.includes('@')) {
+                    setStatus('Please enter a valid Binance email.', 'error');
+                    return;
+                }
+                if (balance < MIN_WITHDRAW) {
+                    setStatus(`Minimum withdrawal is $${MIN_WITHDRAW}. Current: $${balance.toFixed(6)}`, 'error');
+                    return;
+                }
+
+                // simulate withdrawal
+                const amount = balance;
+                setStatus(`Processing withdrawal of $${amount.toFixed(6)} USDT to ${email} ...`, 'info');
+                withdrawBtn.disabled = true;
+
+                // simulate async process
+                setTimeout(() => {
+                    // deduct balance
+                    balance = 0;
+                    updateUI();
+                    setStatus(`✅ Withdrawal of $${amount.toFixed(6)} USDT sent to ${email} (Binance)`, 'success');
+                    withdrawBtn.disabled = false;
+                    updateUI();
+                }, 1800);
+            }
+
+            // ------- event binding -------
+            watchBtn.addEventListener('click', watchAd);
+
+            withdrawBtn.addEventListener('click', handleWithdraw);
+
+            // email input change -> update withdraw button
+            binanceEmail.addEventListener('input', function() {
+                updateUI();
+                if (this.value.trim().length > 0 && this.value.includes('@')) {
+                    setStatus('Binance email set', 'info');
+                }
+            });
+
+            // ------- init -------
+            function init() {
+                // first, check daily reset
+                checkDailyReset();
+                // load email from storage
+                const savedEmail = localStorage.getItem('simpleEarn_binanceEmail') || '';
+                if (savedEmail) binanceEmail.value = savedEmail;
+                // update UI
+                updateUI();
+                updateTimerDisplay();
+                // auto save email on change
+                binanceEmail.addEventListener('change', function() {
+                    localStorage.setItem('simpleEarn_binanceEmail', this.value.trim());
+                });
+                setStatus('Ready • Watch ads to earn', 'info');
+                if (balance > 0) {
+                    setStatus(`Balance: $${balance.toFixed(6)} USDT`, 'info');
+                }
+            }
+
+            init();
+        })();
+    </script>
+</body>
+</html>
